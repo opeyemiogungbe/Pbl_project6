@@ -125,12 +125,24 @@ sudo mount /dev/webdata-vg/apps-lv /var/www/html/
 ```
 sudo rsync -av /var/log/. /home/recovery/logs/
 ```
-Mount /var/log on logs-lv logical volume. (Note that all the existing data on /var/log will be deleted. That is why step 17 above is very important)
+18. Mount /var/log on logs-lv logical volume. (Note that all the existing data on /var/log will be deleted. That is why step 17 above is very important)
 
 ```
 sudo mount /dev/webdata-vg/logs-lv /var/log
 ```
+![Screenshot 2023-07-28 163903](https://github.com/opeyemiogungbe/Pbl_project6/assets/136735745/e35e977c-b028-480f-b9c2-787260e078ef)
+
+i will restore log files back into /var/log directory and update /etc/fstab file so that the mount configuration will persist after restart of the server( The UUID of the device will be used to update the /etc/fstab file)
+
+```
+sudo rsync -av /home/recovery/logs/log/. /var/log
+sudo blkid
+sudo vi /etc/fstab
+```
 
 
 
 
+
+
+![Screenshot 2023-07-28 180519](https://github.com/opeyemiogungbe/Pbl_project6/assets/136735745/20a3d42b-6659-47ba-9564-5aa2b4ca800e)
