@@ -66,13 +66,7 @@ sudo pvcreate /dev/xvdh1
    sudo pvs
    ```
 
-   ![Screenshot 2023-07-28 080117](https://github.com/opeyemiogungbe/Pbl_project6/assets/136735745/6094453d-5959-421b-a602-84e4b5e11be4)
-
-```
-sudo pvs
-```
-
-![Screenshot 2023-07-28 080033](https://github.com/opeyemiogungbe/Pbl_project6/assets/136735745/4ccaaefa-2241-4626-bab0-bc344e3982c9)
+ ![Screenshot 2023-07-28 080117](https://github.com/opeyemiogungbe/Pbl_project6/assets/136735745/6094453d-5959-421b-a602-84e4b5e11be4)
 
 9. We need to use vgcreate utility to add all 3 PVs to a volume group (VG). Name the VG webdata-vg
 ```
@@ -80,4 +74,63 @@ sudo vgcreate webdata-vg /dev/xvdh1 /dev/xvdg1 /dev/xvdf1
 ```
 10. we need to verify that our VG has been created successfully by running sudo vgs
 
+![Screenshot 2023-07-28 080117](https://github.com/opeyemiogungbe/Pbl_project6/assets/136735745/242bbb9d-9a0c-4aa7-a27c-9f01f7237ec2)
+
+11. i will use lvcreate utility to create 2 logical volumes. apps-lv (Using half of the PV size), and logs-lv using the remaining space of the PV size. NOTE: apps-lv will be used to store data for the Website while, logs-lv will be used to store data for logs.
+
+```
+sudo lvcreate -n apps-lv -L 14G webdata-vg
+sudo lvcreate -n logs-lv -L 14G webdata-vg
+```
+
+Verify that your Logical Volume has been created successfully by running:
+
+```
+sudo lvs
+```
+
+12. Verify the entire setup
+
+```
+sudo vgdisplay -v #view complete setup - VG, PV, and LV
+```
 ![Screenshot 2023-07-28 154246](https://github.com/opeyemiogungbe/Pbl_project6/assets/136735745/21cd716d-cc98-4879-9c1f-cad96f07b500)
+
+13. i'm going to use mkfs.ext4 to format the logical volumes with ext4 filesystem
+
+```
+sudo mkfs -t ext4 /dev/webdata-vg/apps-lv
+sudo mkfs -t ext4 /dev/webdata-vg/logs-lv
+```
+![Screenshot 2023-07-28 162820](https://github.com/opeyemiogungbe/Pbl_project6/assets/136735745/89e1363b-b80b-4ff0-be16-54d87e9f1ced)
+
+14. Now i'm going to create a folder /var/www/html directory to store website files
+
+```
+sudo mkdir -p /var/www/html
+```
+
+15. And create another folder /home/recovery/logs to store backup of log data
+
+```
+sudo mkdir -p /home/recovery/logs
+```
+
+16. i will Mount /var/www/html on apps-lv logical volume running the command
+
+```
+sudo mount /dev/webdata-vg/apps-lv /var/www/html/
+```
+17. Before mounting logs-lv on /var/log/ i will use the rysnc utilities to copy the log files from /var/logs nto /home/recovery/logs.
+```
+sudo rsync -av /var/log/. /home/recovery/logs/
+```
+Mount /var/log on logs-lv logical volume. (Note that all the existing data on /var/log will be deleted. That is why step 17 above is very important)
+
+```
+sudo mount /dev/webdata-vg/logs-lv /var/log
+```
+
+
+
+
