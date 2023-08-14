@@ -49,3 +49,35 @@ after this we are going to use lsblk to check if our partition was succesful.
   sudo yum install lvm2
   sudo lvmdiskscan
 ```
+
+![Screenshot 2023-07-28 075842](https://github.com/opeyemiogungbe/Pbl_project6/assets/136735745/4dde568c-3c51-413e-bbe9-9b34cc96d414)
+
+7. we will use pvcreate utility to mark each of 3 disks as physical volumes (PVs) to be used by LVM
+```
+sudo pvcreate /dev/xvdf1
+sudo pvcreate /dev/xvdg1
+sudo pvcreate /dev/xvdh1
+```
+
+![Screenshot 2023-07-28 075903](https://github.com/opeyemiogungbe/Pbl_project6/assets/136735745/da58de49-ac63-4d87-89d9-366e3221e218)
+
+8. Verify that our Physical volume has been created successfully by runing
+   ```
+   sudo pvs
+   ```
+
+   ![Screenshot 2023-07-28 080117](https://github.com/opeyemiogungbe/Pbl_project6/assets/136735745/6094453d-5959-421b-a602-84e4b5e11be4)
+
+```
+sudo pvs
+```
+
+![Screenshot 2023-07-28 080033](https://github.com/opeyemiogungbe/Pbl_project6/assets/136735745/4ccaaefa-2241-4626-bab0-bc344e3982c9)
+
+9. We need to use vgcreate utility to add all 3 PVs to a volume group (VG). Name the VG webdata-vg
+```
+sudo vgcreate webdata-vg /dev/xvdh1 /dev/xvdg1 /dev/xvdf1
+```
+10. we need to verify that our VG has been created successfully by running sudo vgs
+
+![Screenshot 2023-07-28 154246](https://github.com/opeyemiogungbe/Pbl_project6/assets/136735745/21cd716d-cc98-4879-9c1f-cad96f07b500)
