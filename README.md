@@ -40,6 +40,12 @@ sudo gdisk /dev/xvdg
 sudo gdisk /dev/xvdh
 ```
 
-![Screenshot 2023-07-28 065537](https://github.com/opeyemiogungbe/Pbl_project6/assets/136735745/6304bf13-a9a9-43ad-802e-f822b6256bdc)
+![Screenshot 2023-07-28 065552](https://github.com/opeyemiogungbe/Pbl_project6/assets/136735745/a0c076bf-86c7-4037-8aa2-fa1459f78d1c)
 
+after this we are going to use lsblk to check if our partition was succesful.
 
+6. Install lvm2 package using and use lvmdiskscan command to check for available partitions.
+ ```
+  sudo yum install lvm2
+  sudo lvmdiskscan
+```
